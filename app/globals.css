@@ -1,0 +1,340 @@
+@import "tailwindcss";
+
+/* ============================================================
+   GEEK ROOM — GLOBAL DESIGN TOKENS
+   Tailwind v4 uses CSS-first configuration via @theme.
+   All design decisions originate here.
+   ============================================================ */
+
+@theme {
+  /* --- Color palette — matched to the Geek Room logo --- */
+  --color-gr-black:     #14151f;   /* dark navy-black */
+  --color-gr-surface:   #1c1e29;
+  --color-gr-surface-2: #242633;
+  --color-gr-border:    #2e3140;
+  --color-gr-border-2:  #464a5c;
+  --color-gr-muted:     #9fa4ba;
+  --color-gr-subtle:    #d0d3e2;
+  --color-gr-offwhite:  #ffffff;
+  --color-gr-white:     #ffffff;
+
+  /* Primary accent: teal — the logo's bracket color */
+  --color-gr-accent:      #0eb0ba;
+  --color-gr-accent-dim:  #0c9aa2;
+  --color-gr-accent-glow: #0eb0ba40; /* accent with 25% opacity for glow effects */
+
+  /* Secondary accent: orange — the logo's slash color */
+  --color-gr-accent-2:      #e85c2e;
+  --color-gr-accent-2-dim:  #cc4a20;
+  --color-gr-accent-2-glow: #e85c2e40;
+
+  /* Semantic */
+  --color-gr-error:   #f87171;
+  --color-gr-warning: #fbbf24;
+  --color-gr-success: #4ade80;
+  --color-gr-info:    #60a5fa;
+
+  /* --- Typography --- */
+  --font-sans:    var(--font-geist-sans), "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    var(--font-geist-mono), "Fira Code", ui-monospace, monospace;
+
+  /* Type scale — fluid friendly sizes using Tailwind's default rem scale */
+  --text-display: clamp(3rem, 8vw, 7rem);
+  --text-headline: clamp(2rem, 5vw, 3.75rem);
+  --text-title: clamp(1.5rem, 3vw, 2.25rem);
+
+  /* --- Spacing --- */
+  --spacing-section: clamp(4rem, 10vw, 8rem);
+  --spacing-container: clamp(1rem, 5vw, 2rem);
+
+  /* --- Border radius --- */
+  --radius-sm:  4px;
+  --radius-md:  8px;
+  --radius-lg:  12px;
+  --radius-xl:  20px;
+  --radius-full: 9999px;
+
+  /* --- Shadows / glows --- */
+  --shadow-accent: 0 0 40px var(--color-gr-accent-glow);
+  --shadow-card:   0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+
+  /* --- Animation timing --- */
+  --ease-smooth:  cubic-bezier(0.16, 1, 0.3, 1);    /* fast-in, slow-out (spring-like) */
+  --ease-in-out:  cubic-bezier(0.4, 0, 0.2, 1);      /* standard material easing */
+  --ease-bounce:  cubic-bezier(0.34, 1.56, 0.64, 1); /* subtle overshoot */
+
+  --duration-fast:   150ms;
+  --duration-normal: 300ms;
+  --duration-slow:   600ms;
+  --duration-enter:  800ms;
+}
+
+/* ============================================================
+   GLOBAL RESETS & BASE STYLES
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* Smooth scrolling respecting user preference */
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background-color: var(--color-gr-black);
+  color: var(--color-gr-offwhite);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Subtle grid texture — non-intrusive, elegant dark-tech aesthetic */
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-attachment: fixed;
+}
+
+/* ============================================================
+   TYPOGRAPHY UTILITIES
+   ============================================================ */
+
+.text-display {
+  font-size: var(--text-display);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.0;
+}
+
+.text-headline {
+  font-size: var(--text-headline);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.text-title {
+  font-size: var(--text-title);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.text-accent {
+  color: var(--color-gr-accent);
+}
+
+.text-muted {
+  color: #eaedf7;
+  font-weight: 500;
+}
+
+/* ============================================================
+   LAYOUT UTILITIES & LIVE DESIGN TOKENS
+   ============================================================ */
+
+:root {
+  --ink: #0d0e0c;
+  --ink-2: #181a27;
+  --ink-3: #1e2132;
+  --paper: #ffffff;
+  --muted: #f4f6fc;
+  --subtle: #d2d6ea;
+  --line: rgba(255, 255, 255, 0.16);
+  --line-strong: rgba(255, 255, 255, 0.28);
+  --orange: #ff5a1f;
+  --teal: #19b3bf;
+}
+
+.shell {
+  width: 100%;
+  max-width: 1320px;
+  padding-inline: 1rem;
+  margin-inline: auto;
+}
+@media (min-width: 640px) {
+  .shell {
+    padding-inline: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .shell {
+    padding-inline: 2.5rem;
+  }
+}
+
+.display {
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+  font-weight: 900;
+  line-height: 0.92;
+  color: #ffffff;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.5);
+}
+
+.display em, .wide {
+  color: var(--orange);
+  letter-spacing: -0.02em;
+  font-style: italic;
+  font-weight: 900;
+  text-shadow: 0 0 24px rgba(255, 90, 31, 0.45);
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #f4f6fc;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.btn-primary {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.5rem;
+  padding-inline: 1.35rem;
+  padding-block: 0.7rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border-radius: 9999px;
+  background-color: var(--paper);
+  color: var(--ink);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  background-color: var(--orange);
+  color: #ffffff;
+}
+
+.btn-ghost {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.5rem;
+  padding-inline: 1.35rem;
+  padding-block: 0.7rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background-color: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+}
+.btn-ghost:hover {
+  transform: translateY(-1px);
+  border-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+}
+
+.chinku-dock {
+  pointer-events: none;
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 30;
+  height: 180px;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-reverse {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.container-gr {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: var(--spacing-container);
+}
+
+.section-padding {
+  padding-block: var(--spacing-section);
+}
+
+/* ============================================================
+   INTERACTIVE STATES
+   ============================================================ */
+
+/* Focus ring — visible only via keyboard */
+:focus-visible {
+  outline: 2px solid var(--color-gr-accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Selection */
+::selection {
+  background-color: var(--color-gr-accent-glow);
+  color: var(--color-gr-white);
+}
+
+/* ============================================================
+   REDUCED MOTION
+   When the user prefers reduced motion, disable decorative
+   animations. Components using Motion should check this.
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    /* Remove the animated grid — it's decorative */
+    background-attachment: scroll;
+  }
+}
+
+/* ============================================================
+   SCROLLBAR STYLING (Webkit)
+   ============================================================ */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-gr-black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-gr-border-2);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gr-muted);
+}
